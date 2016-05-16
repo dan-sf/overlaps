@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-#-------------------------------------------------
-# Overlap replace script: Maintained by Dan Fowler
-# Website: dsfcode.com
-# Version 1.0.0
-#-------------------------------------------------
+#----------------
+# Overlap replace
+#----------------
 
 import sys
 import argparse

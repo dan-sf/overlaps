@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-#--------------------------------------------------------
-# Overlap inflation join script: Maintained by Dan Fowler
-# Website: dsfcode.com
-# Version 1.0.0
-#--------------------------------------------------------
+#-----------------------
+# Overlap inflation join
+#-----------------------
 
 import sys
 import argparse

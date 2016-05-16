@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-#------------------------------------------------
-# Overlap lookup script: Maintained by Dan Fowler
-# Website: dsfcode.com
-# Version 1.0.0
-#------------------------------------------------
+#---------------
+# Overlap lookup
+#---------------
 
 import sys
 import argparse
