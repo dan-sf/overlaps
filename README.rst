@@ -23,6 +23,8 @@ Usage
                                         One or zero to include or disallow values from the
                                         lookup file
 
+.. code-block:: bash
+
     usage: replace.py [-h] [-f FILE] [-c COLUMN] [-r REPLACE] [-p PRINTALL]
 
     optional arguments:
@@ -35,6 +37,8 @@ Usage
                                         lookup file (1: replace, 2: append)
       -p PRINTALL, --printall PRINTALL
                                         Print non-matching values with input string
+
+.. code-block:: bash
 
     usage: inflation_join.py [-h] [-1 FILECOL1] [-2 FILECOL2] [-j JOINFILE]
                              [-p PRINTALL]
