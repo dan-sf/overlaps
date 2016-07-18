@@ -5,7 +5,7 @@ def print_data(row):
     """
     Write data to stdout
     """
-    row = '\t'.join(str(x) for x in row)
+    row = '\t'.join(str(i) for i in row)
     sys.stdout.write(row + '\n')
 
 def create_lookup(lookup_file):
