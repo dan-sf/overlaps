@@ -1,45 +1,73 @@
-#!/usr/bin/python
-
-#-----------------------
-# Overlap inflation join
-#-----------------------
-
 import sys
 import argparse
 
-# Parse the args
-parser = argparse.ArgumentParser()
-parser.add_argument("-1", "--file1", action="store", help="Stdin column number to join on", dest="filecol1")
-parser.add_argument("-2", "--file2", action="store", help="File two column number to join on", dest="filecol2")
-parser.add_argument("-j", "--joinfile", action="store", help="File to join on", dest="joinfile")
-parser.add_argument("-p", "--printall", action="store", help="Print non-matching values with input string", dest="printall")
-args = vars(parser.parse_args())
+def join_data(stream, column, join_dict, printall=None):
+    """
+    Loop through stdin appending/inflating with join file data
+    """
+    for row in stream:
+        row_list = row.rstrip('\n').split('\t')
+        join_key = row_list[column]
+        if join_key in join_dict:
+            for appended_columns in join_dict[join_key]:
+                print_list(row_list + appended_columns)
+        elif printall != None:
+            row_list.append(printall)
+            print_list(row_list)
 
-def rem(l,item):
-	l.remove(item)
-	return l
+def print_list(row):
+    """
+    List printing helper function
+    """
+    output = '\t'.join(row) + '\n'
+    sys.stdout.write(output)
 
-# # Create lookup dictionary of values from the input file
-lookup_dic = {}
-for row in open(args['joinfile']):
-	row_list = row.strip().split('\t')
-	key = row_list[int(args['filecol2'])]
-	if key not in lookup_dic:
-		lookup_dic[key] = [ rem(row_list,key) ]
-	else:
-		lookup_dic[key].append(rem(row_list,key))
+def remove_join_key(row, key):
+    """
+    Remove key from list and return updated list
+    """
+    row.remove(key)
+    return row
 
-# Loop through stdin looking up against the input values replacing or appending matching records
-for row in sys.stdin:
-	row_list = list(row.strip().split('\t'))
-	if row_list[int(args['filecol1'])] in lookup_dic:
-		s = ""
-		for l in lookup_dic[row_list[int(args['filecol1'])]]:
-			s = '\t'.join(str(x) for x in row_list)
-			for i in l:
-				s = s + "\t" + i
-			print s
-	elif args['printall'] != None:
-		row_list.append(args['printall'])
-		print '\t'.join(str(x) for x in row_list)
+def create_join(join_file, column):
+    """
+    Create dict of lists for each key in the join file
+    """
+    join_dict = {}
+    for row in open(join_file):
+        row_list = row.rstrip('\n').split('\t')
+        key = row_list[column]
+        if key in join_dict:
+            join_dict[key].append(remove_join_key(row_list, key))
+        else:
+            join_dict[key] = [ remove_join_key(row_list, key) ]
+    return join_dict
+
+def cmd_line_parser(args):
+    """
+    Parse cmd line args
+    """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-1", "--file1", action="store", type=int,
+                        help="Stdin column number to join on", dest="column_1")
+    parser.add_argument("-2", "--file2", action="store", type=int,
+                        help="File two column number to join on", dest="column_2")
+    parser.add_argument("-j", "--joinfile", action="store",
+                        help="File to join on", dest="joinfile")
+    parser.add_argument("-p", "--printall", action="store", default=None,
+                        help="Print non-matching values with input string", dest="printall")
+
+    return parser.parse_args(args)
+
+def main():
+    """
+    Run the main task
+    """
+    args = cmd_line_parser(sys.argv[1:])
+    join_dict = create_join(args.joinfile, args.column_2)
+    join_data(sys.stdin, args.column_1, join_dict, args.printall)
+
+if __name__ == '__main__':
+    main()
 
