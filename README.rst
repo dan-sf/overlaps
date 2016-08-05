@@ -25,29 +25,27 @@ Usage
 
 .. code-block:: bash
 
-    usage: replace.py [-h] [-f FILE] [-c COLUMN] [-r REPLACE] [-p PRINTALL]
+    usage: replace.py [-h] [-f FILE] [-c COLUMN] [-r] [-p PRINTALL]
 
     optional arguments:
       -h, --help            show this help message and exit
       -f FILE, --file FILE  Two column file to lookup against
       -c COLUMN, --column COLUMN
-                                        Zero based column number to lookup against
-      -r REPLACE, --replace REPLACE
-                                        One or zero to replace or append values from the
-                                        lookup file (1: replace, 2: append)
+                            Zero based column number to lookup against
+      -r, --replace         Option to replace the field you are matching on
       -p PRINTALL, --printall PRINTALL
-                                        Print non-matching values with input string
+                            Print non-matching values with input string
 
 .. code-block:: bash
 
-    usage: inflation_join.py [-h] [-1 FILECOL1] [-2 FILECOL2] [-j JOINFILE]
+    usage: inflation_join.py [-h] [-1 COLUMN_1] [-2 COLUMN_2] [-j JOINFILE]
                              [-p PRINTALL]
 
     optional arguments:
       -h, --help            show this help message and exit
-      -1 FILECOL1, --file1 FILECOL1
+      -1 COLUMN_1, --file1 COLUMN_1
                             Stdin column number to join on
-      -2 FILECOL2, --file2 FILECOL2
+      -2 COLUMN_2, --file2 COLUMN_2
                             File two column number to join on
       -j JOINFILE, --joinfile JOINFILE
                             File to join on
@@ -85,14 +83,14 @@ Examples
     201402	data_type_1	23753
     $ cat replacefile
     data_type_2	foo
-    $ cat file | replace.py -f replacefile -c 1 -r 1
+    $ cat file | replace.py -f replacefile -c 1 -r
     201308	foo	24474
     201309	foo	9601
     201310	foo	28223
     201312	foo	2239
     201401	foo	89
     201402	foo	11123
-    $ cat file | replace.py -f replacefile -c 1 -r 1 -p bar
+    $ cat file | replace.py -f replacefile -c 1 -r -p bar
     201308	data_type_1	13529	bar
     201309	data_type_1	390	bar
     201310	data_type_1	14145	bar
